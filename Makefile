@@ -1,5 +1,6 @@
 include golang.mk
 
+APP_NAME ?= {{.AppName}}
 PKG = github.com/Clever/$(APP_NAME)
 
 .PHONY: all test build run

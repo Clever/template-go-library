@@ -1,10 +1,10 @@
 package greeting
 
 import (
-	"github.com/davecgh/go-spew/spew"
+	"github.com/Clever/{{.AppName}}/internal/internalexample"
 )
 
 // Hello is a function that prints hello world in a convoluted way
 func Hello() {
-	spew.Dump("Hello, World!")
+	internalexample.InternalHello()
 }
