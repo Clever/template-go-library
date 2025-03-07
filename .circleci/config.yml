@@ -7,7 +7,7 @@ jobs:
   module_publish:
     executor:
       name: clever/golang
-      tag: 1.24
+      tag: "1.24"
       working_directory: ~/go/src/github.com/Clever/{{.AppName}}
     steps:
       - checkout
@@ -23,12 +23,12 @@ workflows:
     jobs:
       - clever/go_test:
           working_directory: ~/go/src/github.com/Clever/{{.AppName}}
-          tag: 1.24
+          tag: "1.24"
           race: true
           cover: true
       - clever/go_lint:
           working_directory: ~/go/src/github.com/Clever/{{.AppName}}
-          tag: 1.24
+          tag: "1.24"
           # go vet complains if mocks aren't present, so we have to
           # install dependencies then generate.
           pre_lint_steps:

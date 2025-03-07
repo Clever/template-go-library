@@ -7,4 +7,11 @@
 \#*\#
 .\#*
 
-./vendor
+vendor
+
+
+# don't commit mocks
+mock_*.go
+
+# ignore coverage results
+coverage.txt
