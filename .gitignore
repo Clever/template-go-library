@@ -1,0 +1,17 @@
+# osx / sshfs
+._*
+.DS_Store
+
+# emacs / vim
+*~
+\#*\#
+.\#*
+
+vendor
+
+
+# don't commit mocks
+mock_*.go
+
+# ignore coverage results
+coverage.txt

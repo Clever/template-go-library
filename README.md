@@ -1,2 +1,5 @@
-# template-go-library
-A
+# {{.AppName}}
+
+{{.Description}}
+
+Owned by {{.TeamName}}
