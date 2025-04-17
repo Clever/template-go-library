@@ -1,26 +1,21 @@
 include golang.mk
 
-APP_NAME ?= {{.AppName}}
-PKG = github.com/Clever/$(APP_NAME)
+PKGS := $(shell go list ./... | grep -v /vendor/)
 
-.PHONY: all test build run
+$(eval $(call golang-version-check,1.24))
+
+.PHONY: all install_deps test lint generate
 SHELL := /bin/bash
 
-all: test build
+all: install_deps test generate
 
 test: $(PKGS) lint
-
-build:
-	echo "TODO build app"
-
-run: build
-	echo "TODO run app"
+$(PKGS): generate golang-test-all-strict-cover-deps golang-setup-coverage
+	$(call golang-test-all-strict-cover,$@)
 
 install_deps:
 	go mod tidy
 	go mod vendor
 
-lint: 
-	go fmt ./...
-	go vet ./...
-	golint -set_exit_status ./...
+generate:
+	go generate ./...
