@@ -1,43 +1,23 @@
 version: 2.1
 
 orbs:
-  clever: clever/circleci-orbs@0.0.2
-
-jobs:
-  module_publish:
-    executor:
-      name: clever/golang
-      tag: "1.24"
-      working_directory: ~/go/src/github.com/Clever/{{.AppName}}
-    steps:
-      - checkout
-      - run:
-          command: cd $HOME && git clone --depth 1 -v https://github.com/Clever/ci-scripts.git && cd ci-scripts && git show --oneline -s
-          name: Clone ci-scripts
-      - run: $HOME/ci-scripts/circleci/github-release $GH_RELEASE_TOKEN
-
+  clever: clever/circleci-orbs@0.2.0
 
 workflows:
-  build_test_publish_deploy:
+  build_test_publish:
     jobs:
       - clever/go_test:
           working_directory: ~/go/src/github.com/Clever/{{.AppName}}
           tag: "1.24"
           race: true
-          cover: true
       - clever/go_lint:
           working_directory: ~/go/src/github.com/Clever/{{.AppName}}
           tag: "1.24"
-          # go vet complains if mocks aren't present, so we have to
-          # install dependencies then generate.
-          pre_lint_steps:
-            - run: make install_deps
-            - run: go generate ./...
-      - module_publish:
+      - clever/module_publish:
+          working_directory: ~/go/src/github.com/Clever/{{.AppName}}
           filters:
             branches:
               only: master
           requires:
             - clever/go_test
             - clever/go_lint
-

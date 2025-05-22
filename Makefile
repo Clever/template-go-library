@@ -1,21 +1,26 @@
 include golang.mk
 
-PKGS := $(shell go list ./... | grep -v /vendor/)
+SHELL := /bin/bash
 
 $(eval $(call golang-version-check,1.24))
 
-.PHONY: all install_deps test lint generate
-SHELL := /bin/bash
+.PHONY: test generate install_deps tool
 
-all: install_deps test generate
+test:
+	go test -race ./...
+	golangci-lint run
 
-test: $(PKGS) lint
-$(PKGS): generate golang-test-all-strict-cover-deps golang-setup-coverage
-	$(call golang-test-all-strict-cover,$@)
-
-install_deps:
+generate: tool vendor
+	go generate ./...
 	go mod tidy
+
+install_deps: vendor
+
+vendor: go.sum go.mod
 	go mod vendor
 
-generate:
-	go generate ./...
+tool: vendor
+	go install tool
+
+go.sum:
+	go mod tidy
